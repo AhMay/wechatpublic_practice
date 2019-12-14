@@ -1,7 +1,6 @@
 '''微信公众号接收到的用户消息类型
 https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Receiving_standard_messages.html
 '''
-import time
 
 class ReceiveMsg(object):
     '''基类'''
@@ -58,3 +57,24 @@ class ReceiveLinkMsg(ReceiveMsg):
         self.Title = xmlData.find('Title').text.encode('utf-8')
         self.Description = xmlData.find('Description').text.encode('utf-8')
         self.Url = xmlData.find('Url').text
+
+class ReceiveEventMsg(ReceiveMsg):
+    '''普通事件'''
+    def __init__(self, xmlData):
+        super(ReceiveEventMsg,self).__init__(xmlData)
+        self.Event = xmlData.find('Event').text
+        self.EventKey = (False,'')
+        if xmlData.find('EventKey') is not None:
+            self.EventKey =(True, xmlData.find('EventKey').text)
+
+        self.Ticket = (False,'')
+        if xmlData.find('Ticket') is not None:
+            self.EventKey =(True, xmlData.find('Ticket').text)
+
+class ReveiveLocationEventMsg(ReceiveEventMsg):
+    '''上报地理位置事件'''
+    def __init__(self,xmlData):
+        super(ReveiveLocationEventMsg,self).__init__(xmlData)
+        self.Latitude = xmlData.find('Latitude').text
+        self.Longitude = xmlData.find('Longitude').text
+        self.Precision = xmlData.find('Precision').text
