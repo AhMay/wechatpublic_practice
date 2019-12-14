@@ -2,6 +2,8 @@ import hashlib
 import time
 import xml.etree.ElementTree as ET
 from wechatutility.WXBizMsgCrypt import WXBizMsgCrypt
+from wechatutility.wechatReceiveMsg import *
+from wechatutility.wechatReplyMsg import *
 
 TOKEN = 'wechatpublic'
 #消息体加密模式
@@ -18,6 +20,40 @@ class wechatCallbackapiTest():
             return echoStr  # 验证成功的话，要返回 echoStr到微信公众平台
         else:
             return ''
+
+    def selfAnswer(self):
+        encrypt_type = self.request.GET.get('encrypt_type', None)
+        pc, postStr = self._encrypt_data(encrypt_type)
+        recMsg = parse_xml(postStr)
+        if recMsg is None:
+            return 'success'
+        elif isinstance(recMsg,ReceiveTextMsg):
+            replyMsg = ReplyTextMsg(recMsg.FromUserName,recMsg.ToUserName,recMsg.Content)
+        elif isinstance(recMsg,ReceiveImageMsg):
+            replyMsg = ReplyImageMsg(recMsg.FromUserName, recMsg.ToUserName, recMsg.MediaId)
+        elif isinstance(recMsg,ReceiveVoiceMsg):
+            replyMsg = ReplyVoiceMsg(recMsg.FromUserName, recMsg.ToUserName, recMsg.MediaId)
+        elif isinstance(recMsg,ReceiveVideoMsg):
+            replyMsg = ReplyVideoMsg(recMsg.FromUserName, recMsg.ToUserName, recMsg.MediaId,recMsg.ThumbMediaId)
+        elif isinstance(recMsg,ReceiveLocationMsg):
+            content = '你发送的是位置，\n纬度为：' + recMsg.Location_X+ ';\n经度为: ' + recMsg.Location_Y \
+                      + ';\n缩放级别为: ' + recMsg.Scale + '; \n位置为: ' + recMsg.Label
+            replyMsg = ReplyTextMsg(recMsg.FromUserName, recMsg.ToUserName, content)
+        elif isinstance(recMsg,ReceiveLinkMsg):
+            content = '你发送的是链接，标题为 ：' + recMsg.Title + '; 内容为：' + recMsg.Description + \
+            '; 链接地址为：' + recMsg.Url
+            replyMsg = ReplyTextMsg(recMsg.FromUserName,recMsg.ToUserName,content)
+        elif isinstance(recMsg,ReceiveEventMsg):
+            content = '有事件发生 Event：' + recMsg.Event
+            content += 'EventKey: ' + recMsg.EventKey[1] if recMsg.EventKey[0] else ''
+            content += 'Ticket: ' + recMsg.Ticket[1] if recMsg.Ticket[0] else ''
+            if isinstance(recMsg,ReveiveLocationEventMsg):
+                content += '纬度: ' + recMsg.Latitude
+                content += '经度: ' + recMsg.Longitude
+                content += '精确度: ' + recMsg.Precision
+            replyMsg = ReplyTextMsg(recMsg.FromUserName,recMsg.ToUserName,recMsg.Content)
+
+        return replyMsg.send()
 
     def responseMsg(self):
         encrypt_type = self.request.GET.get('encrypt_type', None)
@@ -53,6 +89,7 @@ class wechatCallbackapiTest():
         return result
 
     def _encrypt_data(self,encrypt_type):
+        pc = None
         if encrypt_type is not None and encrypt_type == 'aes':  # 解密
             timestamp = self.request.GET['timestamp']
             nonce = self.request.GET['nonce']

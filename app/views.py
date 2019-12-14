@@ -10,12 +10,13 @@ def index(request):
 
 @csrf_exempt
 def wechatindex(request):
-    print('here')
     wechatObj = wechatCallbackapiTest(request)
     if request.GET.get('echostr',None):
         echostr = wechatObj.valid()
         return HttpResponse(echostr)
     else:
         #POST
-        result = wechatObj.responseMsg()
+        #result = wechatObj.responseMsg()
+        print('post here')
+        result = wechatObj.selfAnswer()
         return HttpResponse(result)

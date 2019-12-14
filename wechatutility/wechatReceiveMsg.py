@@ -2,6 +2,29 @@
 https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Receiving_standard_messages.html
 '''
 
+import xml.etree.ElementTree as ET
+
+def parse_xml(web_data):
+    if len(web_data) == 0:
+        return None
+    xmlData = ET.fromstring(web_data)
+    msg_type = xmlData.find('MsgType').text
+    if msg_type == 'text':
+        return ReceiveTextMsg(xmlData)
+    elif msg_type == 'image':
+        return ReceiveImageMsg(xmlData)
+    elif msg_type == 'voice':
+        return ReceiveVoiceMsg(xmlData)
+    elif msg_type in ('video','shortvideo'):
+        return ReceiveVideoMsg(xmlData)
+    elif msg_type == 'location':
+        return ReceiveLocationMsg(xmlData)
+    elif msg_type == 'link':
+        return ReceiveLinkMsg(xmlData)
+    else:
+        print('不能识别的消息类型:'+ msg_type)
+        return None
+
 class ReceiveMsg(object):
     '''基类'''
     def __init__(self,xmlData):
@@ -15,13 +38,13 @@ class ReceiveTextMsg(ReceiveMsg):
     '''文本消息'''
     def __init__(self,xmlData):
         super(ReceiveTextMsg,self).__init__(xmlData)
-        self.content = xmlData.find('Content').text.encode('utf-8')
+        self.Content = xmlData.find('Content').text
 
 class ReceiveImageMsg(ReceiveMsg):
     '''图片消息'''
     def __init__(self,xmlData):
         super(ReceiveImageMsg,self).__init__(xmlData)
-        self.PicUrl = xmlData.find('PicUrl').text.encode('utf-8')
+        self.PicUrl = xmlData.find('PicUrl').text
         self.MediaId = xmlData.find('MediaId').text
 
 class ReceiveVoiceMsg(ReceiveMsg):
@@ -48,14 +71,14 @@ class ReceiveLocationMsg(ReceiveMsg):
         self.Location_X = xmlData.find('Location_X').text
         self.Location_Y = xmlData.find('Location_Y').text
         self.Scale = xmlData.find('Scale').text
-        self.Label = xmlData.find('Label').text.encode('utf-8')
+        self.Label = xmlData.find('Label').text
 
 class ReceiveLinkMsg(ReceiveMsg):
     '''链接消息'''
     def __init__(self,xmlData):
         super(ReceiveLinkMsg,self).__init__(xmlData)
-        self.Title = xmlData.find('Title').text.encode('utf-8')
-        self.Description = xmlData.find('Description').text.encode('utf-8')
+        self.Title = xmlData.find('Title').text
+        self.Description = xmlData.find('Description').text
         self.Url = xmlData.find('Url').text
 
 class ReceiveEventMsg(ReceiveMsg):

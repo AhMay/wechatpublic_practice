@@ -76,30 +76,30 @@ class ReplyVoiceMsg(ReplyMsg):
 
 class ReplyVideoMsg(ReplyMsg):
     '''视频消息'''
-    def __init__(self, toUser, fromUser, media_id,title='',description=''):
+    def __init__(self, toUser, fromUser, media_id,thumbmedia_id,title='',description=''):
         super(ReplyVideoMsg, self).__init__(toUser, fromUser)
         self.media_id = media_id
+        self.thumbmedia_id = thumbmedia_id
         self.title = title
         self.description = description
 
     def send(self):
         xmlForm = '''
-          <xml>
+        <xml>
   <ToUserName><![CDATA[{0}]]></ToUserName>
   <FromUserName><![CDATA[{1}]]></FromUserName>
   <CreateTime>{2}</CreateTime>
   <MsgType><![CDATA[video]]></MsgType>
   <Video>
     <MediaId><![CDATA[{3}]]></MediaId>
-    <Title><![CDATA[{4}]]></Title>
-    <Description><![CDATA[{5}]]></Description>
+    <ThumbMediaId><![CDATA[{4}]]></ThumbMediaId>
+    <Title><![CDATA[{5}]]></Title>
+    <Description><![CDATA[{6}]]></Description>
   </Video>
 </xml>
-
         '''
-
         return xmlForm.format(self.toUser, self.fromUser, str(int(time.time())), self.media_id,
-                              self.title,self.description)
+                              self.thumbmedia_id,self.title,self.description)
 
 class ReplyNewsMsg(ReplyMsg):
     '''图文消息'''
