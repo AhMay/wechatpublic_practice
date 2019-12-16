@@ -44,14 +44,15 @@ class wechatCallbackapiTest():
             '; 链接地址为：' + recMsg.Url
             replyMsg = ReplyTextMsg(recMsg.FromUserName,recMsg.ToUserName,content)
         elif isinstance(recMsg,ReceiveEventMsg):
-            content = '有事件发生 Event：' + recMsg.Event
-            content += 'EventKey: ' + recMsg.EventKey[1] if recMsg.EventKey[0] else ''
-            content += 'Ticket: ' + recMsg.Ticket[1] if recMsg.Ticket[0] else ''
+            print('event here')
+            content = '有事件发生 Event：' + recMsg.Event +'\n'
+            content += 'EventKey: ' + recMsg.EventKey[1] if recMsg.EventKey[0] else '' +'\n'
+            content += 'Ticket: ' + recMsg.Ticket[1] if recMsg.Ticket[0] else '' +'\n'
             if isinstance(recMsg,ReveiveLocationEventMsg):
-                content += '纬度: ' + recMsg.Latitude
-                content += '经度: ' + recMsg.Longitude
-                content += '精确度: ' + recMsg.Precision
-            replyMsg = ReplyTextMsg(recMsg.FromUserName,recMsg.ToUserName,recMsg.Content)
+                content += '纬度: ' + recMsg.Latitude +'\n'
+                content += '经度: ' + recMsg.Longitude + '\n'
+                content += '精确度: ' + recMsg.Precision + '\n'
+            replyMsg = ReplyTextMsg(recMsg.FromUserName,recMsg.ToUserName,content)
 
         return replyMsg.send()
 

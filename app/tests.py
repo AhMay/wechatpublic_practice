@@ -1,12 +1,14 @@
 from django.test import TestCase
 import xml.etree.ElementTree as ET
+import requests
+import json
 
-teststr =b'''<xml>
-<ToUserName><![CDATA[gh_ff0d9ce9cac3]]></ToUserName>\n
-<FromUserName><![CDATA[ouRxO1KGnCdQ2ONHAwUwc98W_NMI]]></FromUserName>\n
-<CreateTime>1576147191</CreateTime>\n<MsgType><![CDATA[text]]></MsgType>\n
-<Content><![CDATA[\xe6\x88\x91\xe4\xbb\xac]]></Content>\n<MsgId>22565001767429625</MsgId>\n</xml>'''
-
-xmlData = ET.fromstring(teststr)
-a = xmlData.find('MsgType').text
-print(a)
+appId = 'wx349372b8988f6776'  # 测试账号的appid 和 ssecret
+appSecret = '842393f9522920ff375e3e50873c3c3c'
+accesstoken_api = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}'.format(
+    appId, appSecret
+)
+response = requests.get(accesstoken_api)
+accessToken = json.loads(response.text, encoding='utf-8')
+print(accessToken['access_token'])
+print(accessToken['expires_in'])

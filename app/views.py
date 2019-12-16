@@ -17,6 +17,5 @@ def wechatindex(request):
     else:
         #POST
         #result = wechatObj.responseMsg()
-        print('post here')
         result = wechatObj.selfAnswer()
         return HttpResponse(result)
