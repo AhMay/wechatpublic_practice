@@ -31,7 +31,6 @@ class ReplyTextMsg(ReplyMsg):
 
         return xmlForm.format(self.toUser,self.fromUser,str(int(time.time())),self.content)
 
-
 class ReplyImageMsg(ReplyMsg):
     '''图片消息'''
     def __init__(self, toUser, fromUser, media_id):

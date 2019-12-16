@@ -110,3 +110,6 @@ class ReveiveLocationEventMsg(ReceiveEventMsg):
         self.Latitude = xmlData.find('Latitude').text
         self.Longitude = xmlData.find('Longitude').text
         self.Precision = xmlData.find('Precision').text
+
+class ReceiveCustomEventMsg(ReceiveEventMsg):
+    pass
