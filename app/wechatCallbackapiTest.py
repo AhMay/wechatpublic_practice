@@ -32,7 +32,13 @@ class wechatCallbackapiTest():
         elif isinstance(recMsg,ReceiveImageMsg):
             replyMsg = ReplyImageMsg(recMsg.FromUserName, recMsg.ToUserName, recMsg.MediaId)
         elif isinstance(recMsg,ReceiveVoiceMsg):
-            replyMsg = ReplyVoiceMsg(recMsg.FromUserName, recMsg.ToUserName, recMsg.MediaId)
+            print(postStr)
+            if recMsg.Recognition is not '':
+                content = '你说的是：' + recMsg.Recognition
+                replyMsg = ReplyTextMsg(recMsg.FromUserName, recMsg.ToUserName, content)
+            else:
+                replyMsg = ReplyVoiceMsg(recMsg.FromUserName, recMsg.ToUserName, recMsg.MediaId)
+
         elif isinstance(recMsg,ReceiveVideoMsg):
             replyMsg = ReplyVideoMsg(recMsg.FromUserName, recMsg.ToUserName, recMsg.MediaId,recMsg.ThumbMediaId)
         elif isinstance(recMsg,ReceiveLocationMsg):

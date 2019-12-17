@@ -62,7 +62,7 @@ class ReceiveVoiceMsg(ReceiveMsg):
         self.MediaId = xmlData.find('MediaId').text
         self.Recognition = ''
         if xmlData.find('Recognition') is not None:
-            self.Recognition = xmlData.find('Recognition').text
+            self.Recognition ='' if xmlData.find('Recognition').text is None else xmlData.find('Recognition').text
 
 class ReceiveVideoMsg(ReceiveMsg):
     '''视频消息和小视频消息'''
@@ -111,5 +111,24 @@ class ReveiveLocationEventMsg(ReceiveEventMsg):
         self.Longitude = xmlData.find('Longitude').text
         self.Precision = xmlData.find('Precision').text
 
-class ReceiveCustomEventMsg(ReceiveEventMsg):
-    pass
+class ReceiveViewEventMsg(ReceiveEventMsg):
+    '''view 和小程序'''
+    def __init__(self, xmlData):
+        super(ReceiveViewEventMsg, self).__init__(xmlData)
+        self.MenuId = xmlData.find('MenuId').text
+
+class ReceiveScanCodeEventMsg(ReceiveEventMsg):
+    '''scancode_push  scancode_waitmsg'''
+    def __init__(self, xmlData):
+        super(ReceiveScanCodeEventMsg, self).__init__(xmlData)
+        self.ScanCodeInfo = xmlData.find('ScanCodeInfo').text
+        self.ScanResult = xmlData.find('ScanResult').text
+
+class ReceivePicEventMsg(ReceiveEventMsg):
+    '''pic_sysphoto  scancode_waitmsg pic_weixin'''
+    def __init__(self, xmlData):
+        super(ReceivePicEventMsg, self).__init__(xmlData)
+        self.ScanCodeInfo = xmlData.find('ScanCodeInfo').text
+        self.ScanResult = xmlData.find('ScanResult').text
+        picItems = xmlData.getiterator('PicMd5Sum')
+        self.SendPicsInfo = [x.text for x in picItems]
