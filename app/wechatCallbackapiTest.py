@@ -1,9 +1,12 @@
 import hashlib
 import time
 import xml.etree.ElementTree as ET
+import requests
+import json
 from wechatutility.WXBizMsgCrypt import WXBizMsgCrypt
 from wechatutility.wechatReceiveMsg import *
 from wechatutility.wechatReplyMsg import *
+
 
 TOKEN = 'wechatpublic'
 #消息体加密模式
@@ -63,7 +66,13 @@ class wechatCallbackapiTest():
                 content += '纬度: ' + recMsg.Latitude +'\n'
                 content += '经度: ' + recMsg.Longitude + '\n'
                 content += '精确度: ' + recMsg.Precision + '\n'
-            replyMsg = ReplyTextMsg(recMsg.FromUserName,recMsg.ToUserName,content)
+                ak = 'QGeUGqrqWwHNSMWC0QOHixE4DGvH7AH0'
+                url = 'http://api.map.baidu.com/geocoder?location={0},{1}&output=json&key={2}'.format(
+                    recMsg.Latitude,recMsg.Longitude,ak
+                )
+                response = requests.get(url)
+
+            replyMsg = ReplyTextMsg(recMsg.FromUserName,recMsg.ToUserName,response.text)
 
         return replyMsg.send()
 

@@ -18,6 +18,7 @@ def refresh_access_token(refresh_token):
     return json.loads(response.text)
 
 def query_userinfo(access_token,openid,lang='zh_CN'):
+    #无需关注
     query_url='https://api.weixin.qq.com/sns/userinfo?access_token={0}&openid={1}&lang={2}'.format(
         access_token,openid,lang
     )
