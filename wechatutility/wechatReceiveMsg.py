@@ -101,7 +101,7 @@ class ReceiveEventMsg(ReceiveMsg):
         self.Ticket = (False,'')
         if xmlData.find('Ticket') is not None:
             ticket = '' if xmlData.find('Ticket').text is None else xmlData.find('Ticket').text
-            self.EventKey =(True, ticket)
+            self.Ticket =(True, ticket)
 
 class ReveiveLocationEventMsg(ReceiveEventMsg):
     '''上报地理位置事件'''
