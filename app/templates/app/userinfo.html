@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- meta使用viewport以确保页面可自由缩放 -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oauth2.0认证</title>
+
+<!-- 引入 jQuery Mobile 样式 -->
+<link rel="stylesheet" href="http://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+<!-- 引入 jQuery 库 -->
+<script src="http://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<!-- 引入 jQuery Mobile 库 -->
+<script src="http://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+    <div class="fieldcontain">
+        {% for k,v in userinfo.items %}
+            <div>
+                <label for="{{k}}">{{k |upper}}</label>
+                <input name="{{k}}" id="{{k}}" value="{{v}}" type="text">
+            </div>
+        {% empty %} no userinfo
+        {% endfor %}
+
+    </div>
+</body>
+</html>

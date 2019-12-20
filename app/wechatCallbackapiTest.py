@@ -28,7 +28,11 @@ class wechatCallbackapiTest():
         if recMsg is None:
             return 'success'
         elif isinstance(recMsg,ReceiveTextMsg):
-            replyMsg = ReplyTextMsg(recMsg.FromUserName,recMsg.ToUserName,recMsg.Content)
+            #测试 Oauth认证
+            content = '<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx349372b8988f6776&redirect_uri=http://ahmay.ngrok2.xiaomiqiu.cn/&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect">' \
+                      '单击这里体验OAuth授权</a>'
+           # replyMsg = ReplyTextMsg(recMsg.FromUserName,recMsg.ToUserName,recMsg.Content)
+            replyMsg = ReplyTextMsg(recMsg.FromUserName, recMsg.ToUserName, content)
         elif isinstance(recMsg,ReceiveImageMsg):
             replyMsg = ReplyImageMsg(recMsg.FromUserName, recMsg.ToUserName, recMsg.MediaId)
         elif isinstance(recMsg,ReceiveVoiceMsg):

@@ -1,6 +1,7 @@
 import requests
 import time
 import json
+import wechat_Const
 
 class Basic:
     def __init__(self):
@@ -8,8 +9,8 @@ class Basic:
         self.__leftTime = 0
 
     def __real_get_accesstoken(self):
-        appId = 'wx349372b8988f6776' #测试账号的appid 和 ssecret
-        appSecret = '842393f9522920ff375e3e50873c3c3c'
+        appId =wechat_Const.appId
+        appSecret = wechat_Const.appSecret
         #appId = 'wx4409cf14b491bef5'  # 我的appid 和 ssecret
       #  appSecret = '5d97ccc1119b3c4e50c8a3776d7a5ada'
         accesstoken_api = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}'.format(
