@@ -96,6 +96,19 @@ class PermMedia(object):
         response = requests.post(get_url,json.dumps(postData))
         return json.loads(response.text,encoding='utf-8')
 
+    def get_uploadedvideo(self,access_token,media_id,video_title='',video_intro=''):
+        '''为群发视频消息使用
+        https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Batch_Sends_and_Originality_Checks.html
+        '''
+        upload_url = 'https://api.weixin.qq.com/cgi-bin/media/uploadvideo?access_token=%s'% access_token
+        postData ={
+            'media_id':media_id,
+            "title": video_title,
+            "description": video_intro
+        }
+        result = requests.post(upload_url,json.dumps(postData,ensure_ascii=False).encode('utf-8'))
+        return json.loads(result.text)
+
 if __name__ == '__main__':
     access_token = wechatBasic.Basic().get_access_token()
     perm_media = PermMedia()
